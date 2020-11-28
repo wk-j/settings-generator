@@ -16,6 +16,8 @@ publish
 .project
 .working
 .publish
+.packages
+
 
 target
 BenchmarkDotNet.Artifacts

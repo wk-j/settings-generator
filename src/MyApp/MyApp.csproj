@@ -10,10 +10,13 @@
 
   <ItemGroup>
     <Analyzer Include="../MyGenerator/bin/$(Configuration)/netstandard2.0/MyGenerator.dll" />
-    <Analyzer Include="../SettingsGenerator/bin/$(Configuration)/netstandard2.0/SettingsGenerator.dll" />
+    <!-- <Analyzer Include="../SettingsGenerator/bin/$(Configuration)/netstandard2.0/SettingsGenerator.dll" /> -->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyGenerator\MyGenerator.csproj" />
-    <ProjectReference Include="..\SettingsGenerator\SettingsGenerator.csproj" />
+    <!-- <ProjectReference Include="..\SettingsGenerator\SettingsGenerator.csproj" /> -->
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="wk.SettingsGenerator" Version="0.0.1" />
   </ItemGroup>
 </Project>
