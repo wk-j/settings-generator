@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\SettingsGenerator\SettingsGenerator.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Analyzer Include="../SettingsGenerator/bin/$(Configuration)/netstandard2.0/SettingsGenerator.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NJsonSchema" Version="10.2.1" />
+    <PackageReference Include="wk.SettingsGenerator" Version="0.0.6" />
+  </ItemGroup>
+
+</Project>
