@@ -29,7 +29,7 @@ namespace MyGenerator {
             var text = generated.ToString();
             var source = template.Replace("{_generate_}", text);
 
-            context.AddSource("HelloGenerator", SourceText.From(source, Encoding.UTF8));
+            context.AddSource("AppSettings.g.cs", SourceText.From(source, Encoding.UTF8));
 
         }
 

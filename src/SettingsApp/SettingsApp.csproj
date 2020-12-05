@@ -1,8 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\SettingsGenerator\SettingsGenerator.csproj" />
-  </ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,12 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Analyzer Include="../SettingsGenerator/bin/$(Configuration)/netstandard2.0/SettingsGenerator.dll" />
+    <ProjectReference Include="..\SettingsGenerator\SettingsGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema" Version="10.2.1" />
-    <PackageReference Include="wk.SettingsGenerator" Version="0.0.6" />
+    <AdditionalFiles Include="appsettings.json" />
   </ItemGroup>
 
 </Project>

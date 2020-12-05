@@ -1,10 +1,15 @@
 ﻿using System;
-using SettingsGenerator;
 
 namespace SettingsGeneratorTest {
+    [AppSettings(FileName = "appsettings.json")]
+    partial class AppSettings {
+
+    }
+
     class Program {
         static void Main(string[] args) {
-            var a = new SettingsGenerator.AppSettings { };
+            var settings = new AppSettings();
+            Console.WriteLine(settings.Database == null);
         }
     }
 }
