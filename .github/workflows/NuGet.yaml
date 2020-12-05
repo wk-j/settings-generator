@@ -25,6 +25,7 @@ jobs:
 
       - name: Build
         run: |
+          mkdir .packages
           dotnet pack src/$PROJECT --output __publish__/X /p:Version=${{ steps.get-version.outputs.VERSION }}
 
       - name: Push
