@@ -1,14 +1,11 @@
-using System.IO;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
-using System;
 
 namespace SettingsGenerator {
-
     [Generator]
     internal class TypeGenerator : ISourceGenerator {
         private const string settingsAttributeText = @"
@@ -19,24 +16,22 @@ public class AppSettingsAttribute : Attribute {
 }
 ";
 
-        private AdditionalText GetJsonSettings(GeneratorExecutionContext context, string fileName) {
-            return context.AdditionalFiles
-                .Where(x => x.Path.EndsWith(fileName))
-                .ToList()
-                .FirstOrDefault();
-        }
+        private AdditionalText GetJsonSettings(GeneratorExecutionContext context, string fileName) =>
+            context.AdditionalFiles
+                .FirstOrDefault(x => x.Path.EndsWith(fileName));
 
         private List<INamedTypeSymbol> GetClassSymbals(GeneratorExecutionContext context, SyntaxReceiver receiver) {
             var options = (context.Compilation as CSharpCompilation)
                 .SyntaxTrees[0].Options as CSharpParseOptions;
 
-            var compilation = context.Compilation.AddSyntaxTrees(CSharpSyntaxTree.ParseText(SourceText.From(settingsAttributeText, Encoding.UTF8), options));
+            var tree = CSharpSyntaxTree.ParseText(SourceText.From(settingsAttributeText, Encoding.UTF8), options);
+            var compilation = context.Compilation.AddSyntaxTrees(tree);
             var attributeSymbol = compilation.GetTypeByMetadataName("AppSettingsAttribute");
             var classSymbals = new List<INamedTypeSymbol>();
 
-            foreach (var clazz in receiver.CandidateClasses) {
-                var model = compilation.GetSemanticModel(clazz.SyntaxTree);
-                var classSymbal = model.GetDeclaredSymbol(clazz);
+            foreach (var item in receiver.CandidateClasses) {
+                var model = compilation.GetSemanticModel(item.SyntaxTree);
+                var classSymbal = model.GetDeclaredSymbol(item);
                 if (classSymbal.GetAttributes().Any(x => x.AttributeClass.Equals(attributeSymbol, SymbolEqualityComparer.Default))) {
                     classSymbals.Add(classSymbal);
                 }
@@ -50,20 +45,20 @@ public class AppSettingsAttribute : Attribute {
             var fileNameAttribute = att.NamedArguments[0];
             var fileNameValue = fileNameAttribute.Value.Value as string;
 
-            var setting = GetJsonSettings(context, fileNameValue);
-            var json = setting.GetText().ToString();
-            var def = new Json2Class.ClassGenerator().JsonToClasses(json, new Json2Class.ClassOptions {
+            var settingFile = GetJsonSettings(context, fileNameValue);
+            var json = settingFile.GetText().ToString();
+            var classDefinition = new Json2Class.ClassGenerator().JsonToClasses(json, new Json2Class.ClassOptions {
                 Namespace = namespaceName,
                 ClassName = classSymbol.Name,
                 Partial = true,
                 ReferencClassSuffix = "Options"
             });
 
-            return SourceText.From(def, Encoding.UTF8);
+            return SourceText.From(classDefinition, Encoding.UTF8);
         }
 
         public void Execute(GeneratorExecutionContext context) {
-            Inject(context);
+            InjectAttribute(context);
 
             if (context.SyntaxReceiver is not SyntaxReceiver receiver) {
                 return;
@@ -80,7 +75,7 @@ public class AppSettingsAttribute : Attribute {
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
 
-        private void Inject(GeneratorExecutionContext context) {
+        private void InjectAttribute(GeneratorExecutionContext context) {
             context.AddSource("AppSettings.Attribute.g.cs", SourceText.From(settingsAttributeText, Encoding.UTF8));
         }
     }
