@@ -54,8 +54,10 @@ public class AppSettingsAttribute : Attribute {
             var json = setting.GetText().ToString();
             var def = new Json2Class.ClassGenerator().JsonToClasses(json, new Json2Class.ClassOptions {
                 Namespace = namespaceName,
-                ClassName = classSymbol.Name
-            }).Replace("public class", "public partial class");
+                ClassName = classSymbol.Name,
+                Partial = true,
+                ReferencClassSuffix = "Options"
+            });
 
             return SourceText.From(def, Encoding.UTF8);
         }
@@ -69,12 +71,9 @@ public class AppSettingsAttribute : Attribute {
 
             var symbols = GetClassSymbals(context, receiver);
             foreach (var item in symbols) {
-                Console.WriteLine("Add source {0}", item.Name);
                 var source = CreateAppSettingsSource(item, context);
                 context.AddSource(item.Name + ".AppSettings.g.cs", source);
             }
-
-            Console.WriteLine("Execute {0}", context);
         }
 
         public void Initialize(GeneratorInitializationContext context) {

@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace App2 {
     [AppSettings(FileName = "appsettings.json")]
     partial class AppSettings2 {
