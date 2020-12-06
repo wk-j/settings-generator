@@ -1,5 +1,5 @@
 namespace MyWeb.Settings {
-    [AppSettings(FileName = "appsettings.Development.json")]
+    [AppSettings(FileName = "appsettings.json")]
     public partial class AppSettings {
     }
 }

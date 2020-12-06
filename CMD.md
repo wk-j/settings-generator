@@ -3,7 +3,7 @@
 ```
 rm -rf .packages
 dotnet clean src/SettingsGenerator
-dotnet pack src/SettingsGenerator -o .packages /p:Version=0.1.2
+dotnet pack src/SettingsGenerator -o .packages /p:Version=0.0.3
 unzip .packages/wk.SettingsGenerator.0.1.1.nupkg  -d .packages/p
 
 dotnet add tests/MyWeb/MyWeb.csproj package wk.SettingsGenerator
