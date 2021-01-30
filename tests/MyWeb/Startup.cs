@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MyWeb.Settings;
 
 namespace MyWeb {
     public class Startup {
@@ -21,6 +22,12 @@ namespace MyWeb {
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) {
+
+            var settings = Configuration.Get<AppSettings>();
+
+            Console.WriteLine(settings.Alfresco.Url);
+            Console.WriteLine(settings.Database.ConnectionString);
+
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyWeb", Version = "v1" });
